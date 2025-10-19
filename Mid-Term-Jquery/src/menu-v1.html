@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Items with Text Quantity</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 60%;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tfoot td {
+      font-weight: bold;
+      background-color: #eaeaea;
+    }
+
+    button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>Add Items from ListBox to Table (No Input)</h3>
+  <div>
+    <select id="item" multiple>
+      <option value="100">Apple</option>
+      <option value="200">Banana</option>
+      <option value="300">Orange</option>
+      <option value="400">Mango</option>
+      <option value="500">Pineapple</option>
+    </select>
+    <br><br>
+    <button class="add">Add</button>
+  </div>
+
+  <table class="bill">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Các hàng sẽ được thêm vào đây -->
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2">Total</td>
+        <td id="total">0</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <script>
+    $(document).ready(function () {
+      // Khi nhấn nút Add
+      $('.add').on('click', function () {
+        $('#item option:selected').each(function () {
+          const itemName = $(this).text();
+          const unitPrice = parseInt($(this).val());
+
+          // Kiểm tra xem sản phẩm đã có trong bảng chưa
+          const existingRow = $('.bill tbody tr').filter(function () {
+            return $(this).find('td:first').text() === itemName;
+          });
+
+          if (existingRow.length > 0) {
+            // Nếu đã có -> tăng số lượng
+            const qtyCell = existingRow.find('td:eq(1)'); // lấy cột số lượng (cột thứ 2)
+            let currentQty = parseInt(qtyCell.text());
+            currentQty++;
+            qtyCell.text(currentQty);
+
+            // Cập nhật lại tiền
+            const basePrice = parseInt(existingRow.data('price'));
+            existingRow.find('td:eq(2)').text(currentQty * basePrice);
+          } else {
+            // Nếu chưa có -> thêm hàng mới
+            const newRow = $(`
+              <tr data-price="${unitPrice}">
+                <td>${itemName}</td>
+                <td>1</td>
+                <td>${unitPrice}</td>
+              </tr>
+            `);
+            $('.bill tbody').append(newRow);
+          }
+        });
+        updateTotal();
+      });
+
+      // Hàm tính tổng
+      function updateTotal() {
+        let total = 0;
+        $('.bill tbody tr').each(function () {
+          total += parseInt($(this).find('td:eq(2)').text());
+        });
+        $('#total').text(total);
+      }
+    });
+  </script>
+</body>
+
+</html>

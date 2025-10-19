@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected-Row</title>
+    <style>
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            margin: auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        tr.selected{
+            background-color: #b3e5fc !important;
+            ;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="myTable">
+        <thead>
+            <th>STT</th>
+            <th>Họ tên</th>
+            <th>Địa chỉ</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Nguyen Van A</td>
+                <td>Ha Noi</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Tran Van B</td>
+                <td>Da Nang</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Le Van C</td>
+                <td>TP Ho Chi Minh</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+       const table = document.getElementById("myTable");
+        const rows = table.getElementsByTagName("tr");
+
+        for(let i = 1; i < rows.length ; i++){
+            rows[i].addEventListener("click", function(){
+                // Bỏ chọn tất cả các dòng khác
+                for(let j = 1; j < rows.length; j++){
+                    rows[j].classList.remove("selected");
+                }
+                // Chọn dòng sự kiện hiện tại 
+                this.classList.add("selected");
+            });
+        }
+    </script>
+</body>
+
+</html>
